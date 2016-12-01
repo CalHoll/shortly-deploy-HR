@@ -3,6 +3,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      deploy: {
+        src: [
+          'public/lib/jquery.js', 'public/lib/underscore.js', 'public/lib/*.js',
+          'public/client/*.js'
+        ],
+        dest: 'public/shortly-min.js',
+      }
     },
 
     mochaTest: {
@@ -51,6 +58,7 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: 'git push live master'
       }
     },
   });
@@ -88,7 +96,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
+    'concat',
+    'shell:prodServer'
   ]);
 
 
