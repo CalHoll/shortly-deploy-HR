@@ -28,11 +28,17 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      deploy: {
+        files: [
+          {src: 'public/shortly-min.js',
+          dest: 'public/shortly-min.js'},
+        ]
+      }
     },
 
     eslint: {
       target: [
-        // Add list of files to lint here
+        'public/client/*.js'
       ]
     },
 
@@ -85,18 +91,22 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'eslint',
+    'mochaTest',
+    'concat',
+    'uglify',
   ]);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
-      // add your production server task here
+      grunt.task.run([ 'deploy' ]);
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
 
   grunt.registerTask('deploy', [
-    'concat',
+    'build',
     'shell:prodServer'
   ]);
 
